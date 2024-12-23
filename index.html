@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video to Panorama</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            position: relative;
+            overflow: hidden;
+        }
+        .video-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -1;
+        }
+        .container {
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            text-align: center;
+            max-width: 600px;
+            z-index: 1;
+        }
+        h1 {
+            margin-bottom: 20px;
+        }
+        input[type="file"] {
+            margin: 10px 0;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #panoramaContainer {
+            margin-top: 20px;
+        }
+        .image-section {
+            margin-top: 20px;
+        }
+        .image-section img {
+            width: 100%;
+            border-radius: 8px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <video class="video-background" autoplay muted loop>
+        <source src="panorama.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+    <div class="container">
+        <h1>Upload Video to Generate Panorama</h1>
+        <input type="file" id="videoUpload" accept="video/*" onchange="disableVideoUpload()">
+        <button id="generateButton" onclick="generatePanorama()">Generate Panorama</button>
+        <div id="panoramaContainer"></div>
+        <div class="image-section">
+        </div>
+    </div>
+    <script>
+        function updateBackgroundImage() {
+            const backgroundUpload = document.getElementById('backgroundUpload');
+            if (backgroundUpload.files.length > 0) {
+                const imageFile = backgroundUpload.files[0];
+                const imageURL = URL.createObjectURL(imageFile);
+                document.body.style.backgroundImage = url(${imageURL});
+            }
+        }
+        
+        function disableVideoUpload() {
+            const videoUpload = document.getElementById('videoUpload');
+            if (videoUpload.files.length > 0) {
+                videoUpload.disabled = true;
+                document.getElementById('generateButton').disabled = false;
+            }
+        }
+
+        function generatePanorama() {
+            const videoUpload = document.getElementById('videoUpload');
+            const panoramaContainer = document.getElementById('panoramaContainer');
+            if (videoUpload.files.length === 0) {
+                alert('Please upload a video file.');
+                return;
+            }
+            const videoFile = videoUpload.files[0];
+            const videoURL = URL.createObjectURL(videoFile);
+            panoramaContainer.innerHTML = <video src="${videoURL}" controls></video>;
+        }
+    </script>
+</body>
+</html>
